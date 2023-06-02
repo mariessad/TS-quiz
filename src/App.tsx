@@ -57,23 +57,35 @@ function App() {
       <h1>Quiz</h1>
       {/* ternary to display start button if game over or on the last question */}
       {gameOver || userAnswers.length === TOTAL_QUESTIONS ? (
-      <button className="start-button" onClick={startQuiz} > Start </button>): null}
+        <button className="start-button" onClick={startQuiz}>
+          {" "}
+          Start{" "}
+        </button>
+      ) : null}
       {/* only show the score if we are not in gameover */}
-      {!gameOver ? <p className="score">Score:</p>: null}
+      {!gameOver ? <p className="score">Score:</p> : null}
       {/* only show loading when actually loading questions */}
-      {loading ? <p>Loading Questions ...</p> : null }
-      
-      <QuestionCard
-        questionNr={number + 1}
-        totalQuestions={TOTAL_QUESTIONS}
-        question={questions[number].question}
-        answers={questions[number].answers}
-        userAnswer={userAnswers ? userAnswers[number] : undefined}
-        callback={checkAnswer}
-      />
-      <button className="next-button" onClick={nextQuestion}>
-        Next
-      </button>
+      {loading ? <p>Loading Questions ...</p> : null}
+      {/* short circuting to load question card when not loading or game over */}
+      {!loading && !gameOver && (
+        <QuestionCard
+          questionNr={number + 1}
+          totalQuestions={TOTAL_QUESTIONS}
+          question={questions[number].question}
+          answers={questions[number].answers}
+          userAnswer={userAnswers ? userAnswers[number] : undefined}
+          callback={checkAnswer}
+        />
+      )}
+
+      {!gameOver &&
+      !loading &&
+      userAnswers.length === number + 1 &&
+      number !== TOTAL_QUESTIONS - 1 ? (
+        <button className="next-button" onClick={nextQuestion}>
+          Next
+        </button>
+      ) : null}
     </div>
   );
 }
