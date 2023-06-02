@@ -1,5 +1,9 @@
 import React, { useState } from "react";
+// components
+import { fetchQuizQuestions } from "./API";
 import QuestionCard from "./components/QuestionCard";
+// types
+import { Difficulty } from "./API";
 
 const TOTAL_QUESTIONS = 10;
 
@@ -11,6 +15,7 @@ function App() {
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(true);
 
+  console.log(fetchQuizQuestions(TOTAL_QUESTIONS, Difficulty.EASY));
   const startQuiz = async () => {};
 
   const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {};
