@@ -4,6 +4,8 @@ import { fetchQuizQuestions, Question } from "./API";
 import QuestionCard from "./components/QuestionCard";
 // types
 import { QuestionState, Difficulty } from "./API";
+// styles
+import { GlobalStyle, Wrapper } from "./App.styles";
 
 // create type for the answerobject
 export type AnswerObject = {
@@ -55,62 +57,68 @@ function App() {
       // check answer against the correct answer
       const correct = questions[number].correct_answer === answer;
       // increase score if answer is correct
-      if(correct) setScore(prev => prev +1);
+      if (correct) setScore((prev) => prev + 1);
       // save answer in array for user answers
       const answerObject = {
-        question: questions[number].question, answer, correct, correctAnswer: questions[number].correct_answer
+        question: questions[number].question,
+        answer,
+        correct,
+        correctAnswer: questions[number].correct_answer,
       };
 
-      setUserAnswers(prev => [...prev, answerObject])
+      setUserAnswers((prev) => [...prev, answerObject]);
     }
   };
 
   const nextQuestion = () => {
     // move on to next question if we are not on the last question
-    const nextQuestion = number +1;
+    const nextQuestion = number + 1;
 
-    if(nextQuestion === TOTAL_QUESTIONS) {
+    if (nextQuestion === TOTAL_QUESTIONS) {
       setGameOver(true);
-    }else {
-      setNumber(nextQuestion)
+    } else {
+      setNumber(nextQuestion);
     }
   };
 
   return (
-    <div className="App">
-      <h1>Quiz</h1>
-      {/* ternary to display start button if game over or on the last question */}
-      {gameOver || userAnswers.length === TOTAL_QUESTIONS ? (
-        <button className="start-button" onClick={startQuiz}>
-          {" "}
-          Start{" "}
-        </button>
-      ) : null}
-      {/* only show the score if we are not in gameover */}
-      {!gameOver ? <p className="score">Score:{score}</p> : null}
-      {/* only show loading when actually loading questions */}
-      {loading ? <p>Loading Questions ...</p> : null}
-      {/* short circuting to load question card when not loading or game over */}
-      {!loading && !gameOver && (
-        <QuestionCard
-          questionNr={number + 1}
-          totalQuestions={TOTAL_QUESTIONS}
-          question={questions[number].question}
-          answers={questions[number].answers}
-          userAnswer={userAnswers ? userAnswers[number] : undefined}
-          callback={checkAnswer}
-        />
-      )}
+    <>
+      <GlobalStyle />
+      <Wrapper>
+        <h1>Quiz</h1>
+        {/* ternary to display start button if game over or on the last question */}
+        {gameOver || userAnswers.length === TOTAL_QUESTIONS ? (
+          <button className="start-button" onClick={startQuiz}>
+            {" "}
+            Start{" "}
+          </button>
+        ) : null}
+        {/* only show the score if we are not in gameover */}
+        {!gameOver ? <p className="score">Score:{score}</p> : null}
+        {/* only show loading when actually loading questions */}
+        {loading ? <p>Loading Questions ...</p> : null}
+        {/* short circuting to load question card when not loading or game over */}
+        {!loading && !gameOver && (
+          <QuestionCard
+            questionNr={number + 1}
+            totalQuestions={TOTAL_QUESTIONS}
+            question={questions[number].question}
+            answers={questions[number].answers}
+            userAnswer={userAnswers ? userAnswers[number] : undefined}
+            callback={checkAnswer}
+          />
+        )}
 
-      {!gameOver &&
-      !loading &&
-      userAnswers.length === number + 1 &&
-      number !== TOTAL_QUESTIONS - 1 ? (
-        <button className="next-button" onClick={nextQuestion}>
-          Next
-        </button>
-      ) : null}
-    </div>
+        {!gameOver &&
+        !loading &&
+        userAnswers.length === number + 1 &&
+        number !== TOTAL_QUESTIONS - 1 ? (
+          <button className="next-button" onClick={nextQuestion}>
+            Next
+          </button>
+        ) : null}
+      </Wrapper>
+    </>
   );
 }
 
