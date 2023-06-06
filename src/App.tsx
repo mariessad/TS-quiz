@@ -6,7 +6,7 @@ import QuestionCard from "./components/QuestionCard";
 import { QuestionState, Difficulty } from "./API";
 
 // create type for the answerobject
-type AnswerObject = {
+export type AnswerObject = {
   question: string;
   answer: string;
   correct: boolean;
@@ -48,9 +48,33 @@ function App() {
     setLoading(false);
   };
 
-  const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {};
+  const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!gameOver) {
+      // get the user answer- aka the value of the button element being clicked
+      const answer = e.currentTarget.value;
+      // check answer against the correct answer
+      const correct = questions[number].correct_answer === answer;
+      // increase score if answer is correct
+      if(correct) setScore(prev => prev +1);
+      // save answer in array for user answers
+      const answerObject = {
+        question: questions[number].question, answer, correct, correctAnswer: questions[number].correct_answer
+      };
 
-  const nextQuestion = () => {};
+      setUserAnswers(prev => [...prev, answerObject])
+    }
+  };
+
+  const nextQuestion = () => {
+    // move on to next question if we are not on the last question
+    const nextQuestion = number +1;
+
+    if(nextQuestion === TOTAL_QUESTIONS) {
+      setGameOver(true);
+    }else {
+      setNumber(nextQuestion)
+    }
+  };
 
   return (
     <div className="App">
