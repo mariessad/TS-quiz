@@ -87,7 +87,7 @@ function App() {
         </button>
       ) : null}
       {/* only show the score if we are not in gameover */}
-      {!gameOver ? <p className="score">Score:</p> : null}
+      {!gameOver ? <p className="score">Score:{score}</p> : null}
       {/* only show loading when actually loading questions */}
       {loading ? <p>Loading Questions ...</p> : null}
       {/* short circuting to load question card when not loading or game over */}
